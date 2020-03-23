@@ -22,12 +22,12 @@ const dataOut = {
     'testKey': 'test key data',
 };
 
-const recursion = (arr, value) => {
+const makeObject = (arr, value) => {
     const cur = {};
     if (arr.length === 1) {
         return {[arr[0]]: value}
     } else {
-        cur[arr[0]] = recursion(arr.slice(1), value)
+        cur[arr[0]] = makeObject(arr.slice(1), value)
     }
     return cur
 };
@@ -45,11 +45,11 @@ const merge = (obj, key, el) => {
 const f = (data) => {
     let result = {};
     const keys = Object.keys(data);
-    const nested = keys.map((el, ind) => {
+    const nestedObjects = keys.map((el, ind) => {
         const arr = el.split('.');
-        return recursion(arr, data[keys[ind]])
+        return makeObject(arr, data[keys[ind]])
     });
-    nested.forEach(el => {
+    nestedObjects.forEach(el => {
         const key = Object.keys(el)[0];
         merge(result, key, el)
     });
